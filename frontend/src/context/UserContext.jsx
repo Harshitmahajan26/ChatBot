@@ -1,5 +1,5 @@
-import { createContext, useContext, useState } from "react";
-import toast, {Toaster} from "react-hot-toast"
+import { createContext, useContext, useEffect, useState } from "react";
+import toast, {LoaderIcon, Toaster} from "react-hot-toast"
 import axios from "axios"
 import { server } from "../main";
 
@@ -60,8 +60,37 @@ export const UserProvider = ({children}) => {
         }
     }
 
+
+    const [loading, setLoading] = useState(true)
+
+
+    async function fetchUser(){
+        try {
+            const {data} = await axios.get(`${server}/api/user/me`, {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            })
+
+            setIsAuth(true)
+            setUser(data)
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setIsAuth(false)
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchUser()
+    }, [])
+
     return(
-        <UserContext.Provider value={{loginUser, btnLoading, isAuth, setIsAuth, user, verifyUser}}>
+
+        // these are the things we are exporting through UserData
+        <UserContext.Provider value={{loginUser, btnLoading, isAuth, setIsAuth, user, verifyUser, loading}}> 
             {children}
             <Toaster />
         </UserContext.Provider>
