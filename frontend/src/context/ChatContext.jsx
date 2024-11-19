@@ -3,6 +3,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { server } from "../main";
 import toast from "react-hot-toast";
 
+// import dotenv from "dotenv"
+// dotenv.config()
+
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
@@ -19,7 +22,7 @@ export const ChatProvider = ({ children }) => {
         url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCqS6uneThGDs04FzoMq0xfdPNb7bss8kE",
         method: "post",
         data: {
-          contents: [{ parts: [{ text: prompt }] }],   // this is the way defined in the gemini api to send the request
+          contents: [{ parts: [{ text: prompt }] }],
         },
       });
 
@@ -121,7 +124,7 @@ export const ChatProvider = ({ children }) => {
       });
       toast.success(data.message);
       fetchChats();
-      window.location.reload();   // for deployment purpose
+      window.location.reload();
     } catch (error) {
       console.log(error);
       alert("something went wrong");
